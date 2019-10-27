@@ -103,6 +103,4 @@ msg_prompt "Install apps with homebrew cask"
 msg_prompt "Install and Configure Python"
 ~/dotfiles/python.sh
 
-rm sample.s
-
 msg_done "Your machine  works like a charm! =*"

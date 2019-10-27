@@ -1,13 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 # Install MacOS apps
 
-BrewCaskApps=(
-	'docker'
-        'amazon-music'
-        'iterm2'
-        'boostnote'
-)
+source $HOME/dotfiles/log.sh
+
+BrewCaskApps=(boostnote docker amazon-music iterm2 boostnote caffeine)
 
 BrewApps=(
         'python3'
@@ -20,22 +17,30 @@ BrewApps=(
 
 )
 
-install_homebrew(){
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-}
+for app in ${BrewCaskApps[@]}; do
+  if open -Ra "$app" ; then
+    msg_done "$app installed outside of brew" 
+  else
+    if brew cask ls --versions $app  > /dev/null; then 
+        msg_done $app
+    else
+        msg_run $app
+        brew cask install $app 
+    fi
+  fi
+done
 
-install_brew_apps(){
-  for app in BrewCaskApps; do
-    brew cask install $app
-  done
-}
+for app in ${BrewApps[@]}; do
+  if open -Ra "$app" ; then
+    msg_done "$app installed outside of brew" 
+  else
+    if brew ls --versions $app  > /dev/null; then 
+        msg_done $app
+    else
+        msg_run $app
+        brew install $app 
+    fi
+  fi
+done
 
-install_homebrew_cask(){
-  brew tap caskroom/cask
-}
 
-install_brew_cask_apps(){
-  for app in BrewApps; do
-    brew install $app
-  done
-}

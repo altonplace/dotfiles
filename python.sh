@@ -10,7 +10,9 @@ pip_packages=(
 
 
 install_pip_packages(){
-  for packages in pip_packages; do
+  for packages in ${pip_packages[@]}; do
     pip3 install $packages
   done
 }
+
+install_pip_packages
