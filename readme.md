@@ -14,12 +14,14 @@ It targets macOS systems, but it should work on \*nix as well (with `apt-get`).
 
 On a sparkling fresh installation of macOS:
 
-    sudo softwareupdate -i -a
-    xcode-select --install
+```sh
+sudo softwareupdate -i -a
+xcode-select --install
+```
 
 The Xcode Command Line Tools includes `git` and `make` (not available on stock macOS).
 Then, install this repo with `curl` available:
     
-    ```sh
-    $ curl -L https://raw.github.com/vsouza/dotfiles/master/bootstrap.sh | sh
-    ```
+```sh
+curl -L https://raw.github.com/vsouza/dotfiles/master/bootstrap.sh | sh
+```
