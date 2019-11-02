@@ -86,6 +86,12 @@ sudo pmset -a standbydelay 86400
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input
 ###############################################################################
 
+msg_nested_lvl_done "[Accessories] Trackpad: enable tap to click for this user and for the login screen"
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+  
+
 msg_nested_lvl_done "[Accessories] Increasing sound quality for Bluetooth headphones/headsets"
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
@@ -201,6 +207,38 @@ defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock autohide-time-modifier -float 0
 
+msg_nested_lvl_done "[Finder] Set hot corners"
+# Hot corners
+# Possible values:
+#  0: no-op
+#  2: Mission Control
+#  3: Show application windows
+#  4: Desktop
+#  5: Start screen saver
+#  6: Disable screen saver
+#  7: Dashboard
+# 10: Put display to sleep
+# 11: Launchpad
+# 12: Notification Center
+
+
+# Bottom left screen corner → Put to sleep
+defaults write com.apple.dock wvous-bl-corner -int 10
+defaults write com.apple.dock wvous-bl-modifier -int 0
+
+# Top right screen corner → no-op
+defaults write com.apple.dock wvous-tr-corner -int 1
+defaults write com.apple.dock wvous-tr-modifier -int 1048576
+# Top left screen corner → no-op
+defaults write com.apple.dock wvous-tl-corner -int 1
+defaults write com.apple.dock wvous-tl-modifier -int 1048576
+# Bottom right screen corner → no-op
+defaults write com.apple.dock wvous-br-corner -int 1
+defaults write com.apple.dock wvous-br-modifier -int 1048576
+
+
+
+
 ###############################################################################
 # Time Machine
 ###############################################################################
@@ -211,6 +249,14 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 msg_nested_lvl_done "[Time machine] Disable local Time Machine backups"
 hash tmutil &> /dev/null && sudo tmutil disablelocal
+
+###############################################################################
+# Iterm2
+###############################################################################
+
+# Don’t display the annoying prompt when quitting iTerm
+msg_nested_lvl_done "[iterm2] Disable iterm2 quit prompt"
+defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
 ###############################################################################
 # Kill affected applications
