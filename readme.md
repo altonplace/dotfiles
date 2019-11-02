@@ -23,5 +23,5 @@ The Xcode Command Line Tools includes `git` and `make` (not available on stock m
 Then, install this repo with `curl` available:
     
 ```sh
-curl -L https://raw.github.com/vsouza/dotfiles/master/bootstrap.sh | sh
+curl -L https://raw.github.com/altonplace/dotfiles/master/bootstrap.sh | sh
 ```
