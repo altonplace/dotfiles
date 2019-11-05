@@ -103,4 +103,8 @@ msg_prompt "Install apps with homebrew cask"
 msg_prompt "Install and Configure Python"
 ~/dotfiles/python.sh
 
+# update and symlink dotfiles
+msg_prompt "updating dotfiles"
+~/dotfiles/makesymlinks.sh
+
 msg_done "Your machine  works like a charm! =*"
