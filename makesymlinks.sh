@@ -6,42 +6,47 @@
 
 ########## Variables
 
-dir=$HOME/dotfiles                    # dotfiles directory
-olddir=$HOME/dotfiles_old             # old dotfiles backup directory
+DIR=$HOME/dotfiles                    # dotfiles directory
+OLDDIR=$HOME/dotfiles_old             # old dotfiles backup directory
 files=("zshrc" "p10k.zsh" "vimrc")    # list of files/folders to symlink in homedir
 
 ##########
 
 # create dotfiles_old in homedir
-echo "Creating $olddir for backup of any existing dotfiles in ~"
-mkdir -p $olddir
+echo "Creating $OLDDIR for backup of any existing dotfiles in ~"
+mkdir -p $OLDDIR
 echo "...done"
 
 # change to the dotfiles directory
-echo "Changing to the $dir directory"
-cd $dir
+echo "Changing to the $DIR directory"
+cd $DIR
 echo "...done"
 
 # move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks 
 for file in $files; do
-    echo "Moving any existing dotfiles from ~ to $olddir"
-    mv ~/.$file ~/dotfiles_old/
+    echo "Moving any existing dotfiles from ~ to $OLDDIR"
+    mv "$HOME/.$file" "$HOME/dotfiles_old/"
     echo "Creating symlink to $file in home directory."
-    ln -s $dir/$file ~/.$file
+    if [ -L "$HOME/.$file" ]; then
+      rm "$HOME/.$file"
+      ln -s "$DIR/$file" "$HOME/.$file"
+    else
+      ln -s "$DIR/$file" "$HOME/.$file"
+    fi
 done
 
 install_zsh () {
 # Test to see if zshell is installed.  If it is:
 if [ -f /bin/zsh -o -f /usr/bin/zsh ]; then
     # Clone my oh-my-zsh repository from GitHub only if it isn't already present
-    if [[ ! -d $dir/oh-my-zsh/ ]]; then
+    if [[ ! -d $DIR/oh-my-zsh/ ]]; then
         git clone http://github.com/robbyrussell/oh-my-zsh.git        
     fi
 
     # Symlink the oh-my-zsh install
     mv ~/.oh-my-zsh/ ~/dotfiles_old/
     echo "Creating symlink to oh-my-zsh in home directory."
-    ln -s $dir/oh-my-zsh/ $HOME/.oh-my-zsh
+    ln -s "$DIR/oh-my-zsh/" "$HOME/.oh-my-zsh"
 
     # Set the default shell to zsh if it isn't currently set to zsh
     if [[ ! $(echo $SHELL) == $(which zsh) ]]; then
@@ -49,8 +54,8 @@ if [ -f /bin/zsh -o -f /usr/bin/zsh ]; then
     fi
 
     # Install P10k Prompt
-    if [[ ! -d $dir/oh-my-zsh/themes/powerlevel10k ]]; then
-	git clone https://github.com/romkatv/powerlevel10k.git $dir/oh-my-zsh/themes/powerlevel10k
+    if [[ ! -d $DIR/oh-my-zsh/themes/powerlevel10k ]]; then
+	git clone https://github.com/romkatv/powerlevel10k.git $DIR/oh-my-zsh/themes/powerlevel10k
     fi
 else
     # If zsh isn't installed, get the platform of the current machine
