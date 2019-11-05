@@ -4,7 +4,7 @@
 
 source $HOME/dotfiles/log.sh
 
-BrewCaskApps=(boostnote docker amazon-music iterm2 boostnote caffeine)
+BrewCaskApps=(boostnote docker amazon-music iterm2 boostnote caffeine delayedlauncher alfred)
 
 BrewApps=(
         'python3'
