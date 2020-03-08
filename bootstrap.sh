@@ -107,4 +107,8 @@ msg_prompt "Install and Configure Python"
 msg_prompt "updating dotfiles"
 ~/dotfiles/makesymlinks.sh
 
+# config shell
+msg_prompt "configure shell"
+p10k configure
+
 msg_done "Your machine  works like a charm! =*"
