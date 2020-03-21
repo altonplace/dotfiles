@@ -6,21 +6,21 @@ set -e
 # -- Functions -----------------------------------------------------------------------
 # Duplicated code from log.sh
 # since we cannot import a file when installing via cURL
-msg() { echo  "\x1B[0;37m$1\x1B[0m"; }
-msg_ok() { echo  "\x1B[1;32m $1 \x1B[0m"; }
-msg_prompt () { echo  "➜\x1B[1;37m $1 \x1B[0m"; }
-msg_nested_done() { echo  "   * \x1B[0;37m $1 \x1B[0m"; }
-msg_category() { echo  "   * \x1B[0;33m $1 \x1B[0m"; }
-msg_nested_lvl_done() { echo  "       ➜ \x1B[0;37m $1 \x1B[0m"; }
-msg_config() { echo  "➜ \x1B[1;36m $1 ✔\x1B[0m"; }
-msg_run() { echo  "➜\x1B[1;35m $1  $2\x1B[0m"; }
-msg_done() { echo -e "✔ \e[1;37m $1abc \e[0m"; }
+msg() { echo -e  "\x1B[0;37m$1\x1B[0m"; }
+msg_ok() { echo -e  "\x1B[1;32m $1 \x1B[0m"; }
+msg_prompt () { echo -e  "➜\x1B[1;37m $1 \x1B[0m"; }
+msg_nested_done() { echo -e  "   * \x1B[0;37m $1 \x1B[0m"; }
+msg_category() { echo -e  "   * \x1B[0;33m $1 \x1B[0m"; }
+msg_nested_lvl_done() { echo -e  "       ➜ \x1B[0;37m $1 \x1B[0m"; }
+msg_config() { echo -e  "➜ \x1B[1;36m $1 ✔\x1B[0m"; }
+msg_run() { echo -e  "➜\x1B[1;35m $1  $2\x1B[0m"; }
+msg_done() { echo -e "✔ \x1B[1;37m $1 \x1B[0m"; }
 show_art() { echo -e "\x1B[1;37m $1 \x1B[0m"; }
 
 check_and_do()  {
   while true; do
     msg_run "$1"
-    read -p -r  "" yn
+    read -p  "" yn
       case $yn in
           [Yy]* ) $2; break;;
           [Nn]* ) break;;
