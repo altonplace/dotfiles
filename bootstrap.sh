@@ -1,48 +1,36 @@
 #!/bin/sh
-#a
 
 # Tells the shell script to exit if it encounters an error
 set -e
 
-# -- Log -----------------------------------------------------------------------
+# -- Functions -----------------------------------------------------------------------
 # Duplicated code from log.sh
 # since we cannot import a file when installing via cURL
-function msg {
-	echo  "\033[0;37m$1\033[0m";
+msg() { echo  "\033[0;37m$1\033[0m"; }
+msg_ok() { echo  "\033[1;32m $1 \033[0m"; }
+msg_prompt () { echo  "➜\033[1;37m $1 \033[0m"; }
+msg_nested_done() { echo  "   * \033[0;37m $1 \033[0m"; }
+msg_category() { echo  "   * \033[0;33m $1 \033[0m"; }
+msg_nested_lvl_done() { echo  "       ➜ \033[0;37m $1 \033[0m"; }
+msg_config() { echo  "➜ \033[1;36m $1 ✔\033[0m"; }
+msg_run() { echo  "➜\033[1;35m $1  $2\033[0m"; }
+msg_done() { echo  "✔ \033[1;37m $1 \033[0m"; }
+show_art() { echo  "\033[1;37m $1 \033[0m"; }
+
+check_and_do()  {
+  while true; do
+    msg_run "$1"
+    read -p  "" yn
+      case $yn in
+          [Yy]* ) $2; break;;
+          [Nn]* ) break;;
+          * ) echo "Please answer y or n.";;
+      esac
+		yn=""
+  done
 }
 
-function msg_ok {
-	echo  "\033[1;32m $1 \033[0m";
-}
-
-function msg_prompt {
-	echo  "➜\033[1;37m $1 \033[0m";
-}
-function msg_nested_done {
-	echo  "   * \033[0;37m $1 \033[0m";
-}
-function msg_category {
-	echo  "   * \033[0;33m $1 \033[0m";
-}
-
-function msg_nested_lvl_done {
-	echo  "       ➜ \033[0;37m $1 \033[0m";
-}
-
-function msg_config {
-	echo  "➜ \033[1;36m $1 ✔\033[0m";
-}
-
-function msg_run {
-	echo  "➜\033[1;35m $1  $2\033[0m";
-}
-
-function msg_done {
-	echo  "✔ \033[1;37m $1 \033[0m";
-}
-function show_art {
-	echo  "\033[1;37m $1 \033[0m";
-}
+# -- Init -----------------------------------------------------------------------
 
 msg '\n'
 
@@ -61,54 +49,57 @@ msg '\n'
 
 # -- Homebrew ------------------------------------------------------------------
 if hash brew 2> /dev/null; then
-	msg_done "homebrew"
+	msg_done "Hombrew already installed"
 else
+	msg_prompt "Homebrew not installed....installing..."
 	msg_run "homebrew" "ruby -e '$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)'"
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # -- Git -----------------------------------------------------------------------
 if hash git 2> /dev/null; then
-	msg_done "git"
+	msg_done "git already installed"
 else
-	msg_run "git"
+	msg_run "git not installed....installing..."
 	brew install git 2> /dev/null
 fi
 
 
 # -- Dotfiles ------------------------------------------------------------------
-if [[ -d ~/dotfiles ]]; then
-	msg_done "clone dotfiles from Github"
+DIR=~/dotfiles
+if [ -d $DIR ]; then
+	cd $DIR || exit
+	git pull > /dev/null
+	msg_done "Pulled latest dotfiles from Github"
+
 else
 	msg "dotfiles" "git clone https://github.com/altonplace/dotfiles.git ~/dotfiles"
 	git clone https://github.com/altonplace/dotfiles.git ~/dotfiles
+	msg_done "Cloned dotfiles from Github"
 fi
+DIR=. # Uncomment to use the local version of the scripts
+echo $DIR
 
-msg_prompt "Install apps with homebrew cask"
-~/dotfiles/apps.sh
+# -- Apps ------------------------------------------------------------------
+echo "$DIR/apps.sh"
+check_and_do "Install apps with homebrew cask? [y/n]" "$DIR/apps.sh"
 
-# Configure Git
-# msg_prompt "configure git"
-# sh ~/dotfiles/git.sh
+# -- OSX ------------------------------------------------------------------
 
-# Configure osx directives
-# msg_prompt "configure osx directives"
-~/dotfiles/osx.sh
+check_and_do "Configure OSX? [y/n]" "$DIR/osx.sh"
 
-# Configure Vim
-# msg_prompt "configure vim"
-# sh ~/dotfiles/vim.sh
+# -- Python ------------------------------------------------------------------
 
-# Install and Configure Python
-msg_prompt "Install and Configure Python"
-~/dotfiles/python.sh
+check_and_do "Install and Configure Python? [y/n]" "$HOME/dotfiles/python.sh"
 
-# update and symlink dotfiles
-msg_prompt "updating dotfiles"
-~/dotfiles/makesymlinks.sh
+# -- Configure Dotfiles ------------------------------------------------------------------
 
-# config shell
-msg_prompt "configure shell"
-p10k configure
+check_and_do "Configure dotfiles? [y/n]" "$DIR/makesymlinks.sh"
+
+# -- Configure P10K ------------------------------------------------------------------
+
+check_and_do "Configure P10K? [y/n]" p10k configure
+
+# -- Close ------------------------------------------------------------------
 
 msg_done "Your machine  works like a charm! =*"
