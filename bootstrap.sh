@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Tells the shell script to exit if it encounters an error
 set -e
@@ -6,21 +6,21 @@ set -e
 # -- Functions -----------------------------------------------------------------------
 # Duplicated code from log.sh
 # since we cannot import a file when installing via cURL
-msg() { echo  "\033[0;37m$1\033[0m"; }
-msg_ok() { echo  "\033[1;32m $1 \033[0m"; }
-msg_prompt () { echo  "➜\033[1;37m $1 \033[0m"; }
-msg_nested_done() { echo  "   * \033[0;37m $1 \033[0m"; }
-msg_category() { echo  "   * \033[0;33m $1 \033[0m"; }
-msg_nested_lvl_done() { echo  "       ➜ \033[0;37m $1 \033[0m"; }
-msg_config() { echo  "➜ \033[1;36m $1 ✔\033[0m"; }
-msg_run() { echo  "➜\033[1;35m $1  $2\033[0m"; }
-msg_done() { echo  "✔ \033[1;37m $1 \033[0m"; }
-show_art() { echo  "\033[1;37m $1 \033[0m"; }
+msg() { echo  "\x1B[0;37m$1\x1B[0m"; }
+msg_ok() { echo  "\x1B[1;32m $1 \x1B[0m"; }
+msg_prompt () { echo  "➜\x1B[1;37m $1 \x1B[0m"; }
+msg_nested_done() { echo  "   * \x1B[0;37m $1 \x1B[0m"; }
+msg_category() { echo  "   * \x1B[0;33m $1 \x1B[0m"; }
+msg_nested_lvl_done() { echo  "       ➜ \x1B[0;37m $1 \x1B[0m"; }
+msg_config() { echo  "➜ \x1B[1;36m $1 ✔\x1B[0m"; }
+msg_run() { echo  "➜\x1B[1;35m $1  $2\x1B[0m"; }
+msg_done() { echo -e "✔ \e[1;37m $1abc \e[0m"; }
+show_art() { echo -e "\x1B[1;37m $1 \x1B[0m"; }
 
 check_and_do()  {
   while true; do
     msg_run "$1"
-    read -p  "" yn
+    read -p -r  "" yn
       case $yn in
           [Yy]* ) $2; break;;
           [Nn]* ) break;;
@@ -66,22 +66,23 @@ fi
 
 
 # -- Dotfiles ------------------------------------------------------------------
-DIR=~/dotfiles
-if [ -d $DIR ]; then
-	cd $DIR || exit
-	git pull > /dev/null
-	msg_done "Pulled latest dotfiles from Github"
-
-else
-	msg "dotfiles" "git clone https://github.com/altonplace/dotfiles.git ~/dotfiles"
-	git clone https://github.com/altonplace/dotfiles.git ~/dotfiles
-	msg_done "Cloned dotfiles from Github"
-fi
+#DIR=~/dotfiles
+#if [ -d $DIR ]; then
+#	cd $DIR || exit
+#	git pull > /dev/null
+#	msg_done "Pulled latest dotfiles from Github"
+#
+#else
+#	msg "dotfiles" "git clone https://github.com/altonplace/dotfiles.git ~/dotfiles"
+#	git clone https://github.com/altonplace/dotfiles.git ~/dotfiles
+#	msg_done "Cloned dotfiles from Github"
+#fi
 DIR=. # Uncomment to use the local version of the scripts
 echo $DIR
 
 # -- Apps ------------------------------------------------------------------
 echo "$DIR/apps.sh"
+pwd
 check_and_do "Install apps with homebrew cask? [y/n]" "$DIR/apps.sh"
 
 # -- OSX ------------------------------------------------------------------

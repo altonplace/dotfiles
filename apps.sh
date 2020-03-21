@@ -1,18 +1,16 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-# Install MacOS apps
+# shellcheck source=src/log.sh
+source "$HOME/dotfiles/log.sh"
 
-source $HOME/dotfiles/log.sh
 
+# -- Install/Update Cask Apps ------------------------------------------------------------------
 BrewCaskApps=(docker amazon-music iterm2 caffeine delayedlauncher alfred rectangle)
-
-BrewApps=(python3 openssl tree wget awscli ruby git)
 
 for app in "${BrewCaskApps[@]}"; do
   if open -Ra "$app" 2> /dev/null; then
-    msg_done "$app installed outside of brew"
+    msg_done "$app"
   else
-    echo "IM IN THE RIGHT FILE"
     if brew cask ls --versions "$app"  > /dev/null; then
         msg_done "$app"
     else
@@ -23,8 +21,11 @@ for app in "${BrewCaskApps[@]}"; do
   fi
 done
 
+# -- Install/Update Brew Apps ------------------------------------------------------------------
+BrewApps=(python3 openssl tree wget awscli ruby git)
+
 for app in "${BrewApps[@]}"; do
-  if open -Ra "$app" ; then
+  if open -Ra "$app" 2> /dev/null; then
     msg_done "$app installed outside of brew"
   else
     if brew ls --versions "$app"  > /dev/null; then 
@@ -35,5 +36,3 @@ for app in "${BrewApps[@]}"; do
     fi
   fi
 done
-
-
