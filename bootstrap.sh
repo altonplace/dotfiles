@@ -66,23 +66,20 @@ fi
 
 
 # -- Dotfiles ------------------------------------------------------------------
-#DIR=~/dotfiles
-#if [ -d $DIR ]; then
-#	cd $DIR || exit
-#	git pull > /dev/null
-#	msg_done "Pulled latest dotfiles from Github"
-#
-#else
-#	msg "dotfiles" "git clone https://github.com/altonplace/dotfiles.git ~/dotfiles"
-#	git clone https://github.com/altonplace/dotfiles.git ~/dotfiles
-#	msg_done "Cloned dotfiles from Github"
-#fi
-DIR=. # Uncomment to use the local version of the scripts
-echo $DIR
+DIR=~/dotfiles
+if [ -d $DIR ]; then
+	cd $DIR || exit
+	git pull > /dev/null
+	msg_done "Pulled latest dotfiles from Github"
+
+else
+	msg "dotfiles" "git clone https://github.com/altonplace/dotfiles.git ~/dotfiles"
+	git clone https://github.com/altonplace/dotfiles.git ~/dotfiles
+	msg_done "Cloned dotfiles from Github"
+fi
+#DIR=. # Uncomment to use the local version of the scripts
 
 # -- Apps ------------------------------------------------------------------
-echo "$DIR/apps.sh"
-pwd
 check_and_do "Install apps with homebrew cask? [y/n]" "$DIR/apps.sh"
 
 # -- OSX ------------------------------------------------------------------

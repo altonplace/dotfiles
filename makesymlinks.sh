@@ -1,8 +1,11 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 ############################
 # .make.sh
 # This script creates symlinks from the home directory to any desired dotfiles in ~/dotfiles
 ############################
+
+# shellcheck source=src/log.sh
+source "$HOME/dotfiles/log.sh"
 
 ########## Variables
 
@@ -13,20 +16,20 @@ files=("zshrc" "p10k.zsh" "vimrc")    # list of files/folders to symlink in home
 ##########
 
 # create dotfiles_old in homedir
-echo "Creating $OLDDIR for backup of any existing dotfiles in ~"
+msg_run "Creating $OLDDIR for backup of any existing dotfiles in ~"
 mkdir -p "$OLDDIR"
-echo "...done"
+msg_done "...done"
 
 # change to the dotfiles directory
-echo "Changing to the $DIR directory"
+msg_run "Changing to the $DIR directory"
 cd "$DIR" || exit
-echo "...done"
+msg_done "...done"
 
 # move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks 
 for file in "${files[@]}"; do
-    echo "Moving any existing dotfiles from ~ to $OLDDIR"
+    msg_run "Moving any existing dotfiles from ~ to $OLDDIR"
     mv "$HOME/.$file" "$OLDDIR"
-    echo "Creating symlink to $file in home directory."
+    msg_run "Creating symlink to $file in home directory."
     if [ -L "$HOME/.$file" ]; then
       rm "$HOME/.$file"
       ln -s "$DIR/$file" "$HOME/.$file"
@@ -40,22 +43,25 @@ install_zsh () {
 if [ -f /bin/zsh ] || [ -f /usr/bin/zsh ]; then
     # Clone my oh-my-zsh repository from GitHub only if it isn't already present
     if [[ ! -d $DIR/oh-my-zsh/ ]]; then
-        echo "cloning oh-my-zsh"
+        msg_run "cloning oh-my-zsh"
         git clone http://github.com/robbyrussell/oh-my-zsh.git        
     fi
 
     # Symlink the oh-my-zsh install
     mv ~/.oh-my-zsh/ "$OLDDIR"
-    echo "Creating symlink to oh-my-zsh in home directory."
+    msg_run "Creating symlink to oh-my-zsh in home directory."
     ln -s "$DIR/oh-my-zsh/" "$HOME/.oh-my-zsh"
 
     # Set the default shell to zsh if it isn't currently set to zsh
-    echo "Checking if zsh is default"
+    msg_run "Checking if zsh is default"
     if [[ ! $(echo "$SHELL") == $(command -v zsh) ]]; then
-        echo "Changing shell to zsh."
+        msg_run "Changing shell to zsh."
         chsh -s "$(command -v zsh)"
     fi
+    msg_done "Shell is zsh"
+
     # Install P10k Prompt
+    msg_run "Install P10k..."
     if [[ ! -d $DIR/oh-my-zsh/themes/powerlevel10k ]]; then
 	  git clone https://github.com/romkatv/powerlevel10k.git "$DIR/oh-my-zsh/themes/powerlevel10k";
 	  else
@@ -76,8 +82,9 @@ else
             install_zsh
         fi
     # If the platform is OS X, tell the user to install zsh :)
+
     elif [[ $platform == 'Darwin' ]]; then
-        echo "Please install zsh, then re-run this script!"
+        msg_run "Please install zsh, then re-run this script!"
         exit
     fi
 fi
