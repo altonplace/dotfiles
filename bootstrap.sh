@@ -66,9 +66,9 @@ fi
 
 
 # -- Dotfiles ------------------------------------------------------------------
-DIR=~/dotfiles
-if [ -d $DIR ]; then
-	cd $DIR || exit
+DIR=$HOME/dotfiles
+if [ -d "$DIR" ]; then
+	cd "$DIR" || exit
 	git pull > /dev/null
 	msg_done "Pulled latest dotfiles from Github"
 
