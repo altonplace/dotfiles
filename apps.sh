@@ -5,7 +5,7 @@ source "$HOME/dotfiles/log.sh"
 
 
 # -- Install/Update Cask Apps ------------------------------------------------------------------
-BrewCaskApps=(docker amazon-music iterm2 caffeine delayedlauncher alfred rectangle)
+BrewCaskApps=(docker iterm2 alfred rectangle)
 
 for app in "${BrewCaskApps[@]}"; do
   if open -Ra "$app" 2> /dev/null; then
@@ -22,7 +22,7 @@ for app in "${BrewCaskApps[@]}"; do
 done
 
 # -- Install/Update Brew Apps ------------------------------------------------------------------
-BrewApps=(python3 openssl tree wget awscli ruby git)
+BrewApps=(openssl tree wget awscli ruby git)
 
 for app in "${BrewApps[@]}"; do
   if open -Ra "$app" 2> /dev/null; then
