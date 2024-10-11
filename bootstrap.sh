@@ -52,8 +52,7 @@ if hash brew 2> /dev/null; then
 	msg_done "Hombrew already installed"
 else
 	msg_prompt "Homebrew not installed....installing..."
-	msg_run "homebrew" "ruby -e '$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)'"
-	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	msg_run "/bin/bash -c ""\"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
 fi
 
 # -- Git -----------------------------------------------------------------------

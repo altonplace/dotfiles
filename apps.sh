@@ -5,7 +5,7 @@ source "$HOME/dotfiles/log.sh"
 
 
 # -- Install/Update Cask Apps ------------------------------------------------------------------
-BrewCaskApps=(docker iterm2 alfred rectangle)
+BrewCaskApps=(docker iterm2 rectangle)
 
 for app in "${BrewCaskApps[@]}"; do
   if open -Ra "$app" 2> /dev/null; then
@@ -15,7 +15,7 @@ for app in "${BrewCaskApps[@]}"; do
         msg_done "$app"
     else
         msg_run "$app"
-        brew cask install "$app"
+        brew install "$app" --cask
         msg_done "$app"
     fi
   fi
