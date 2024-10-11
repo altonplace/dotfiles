@@ -13,7 +13,7 @@ HYPHEN_INSENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo aws osx autopep8)
+plugins=(git sudo aws autopep8)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -27,15 +27,19 @@ source $ZSH/oh-my-zsh.sh
 export "PATH=$HOME/.toolbox/bin:$PATH"
 
 # Check for built-in adders
-for DOTFILE in `find $HOME/dotfiles/dotfiles`; do
-  if [ -f "$DOTFILE" ]; then
-    source "$DOTFILE"
-  fi
-done
+if [[ -d $HOME/dotfiles/dotfiles ]]; then
+  for DOTFILE in `find $HOME/dotfiles/dotfiles`; do
+    if [ -f "$DOTFILE" ]; then
+      source "$DOTFILE"
+    fi
+  done
+fi
 
 # Check for custom adders
-for DOTFILE in `find $HOME/dotfiles/custom`; do
-  if [ -f "$DOTFILE" ]; then
-    source "$DOTFILE"
-  fi
-done
+if [[ -d $HOME/dotfiles/custom ]]; then
+  for DOTFILE in `find $HOME/dotfiles/custom`; do
+    if [ -f "$DOTFILE" ]; then
+      source "$DOTFILE"
+    fi
+  done
+fi
