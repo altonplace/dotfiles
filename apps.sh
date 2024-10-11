@@ -5,13 +5,13 @@ source "$HOME/dotfiles/log.sh"
 
 
 # -- Install/Update Cask Apps ------------------------------------------------------------------
-BrewCaskApps=(docker iterm2 rectangle)
+BrewCaskApps=(docker iterm2 rectangle roon)
 
 for app in "${BrewCaskApps[@]}"; do
   if open -Ra "$app" 2> /dev/null; then
     msg_done "$app"
   else
-    if brew cask ls --versions "$app"  > /dev/null; then
+    if brew ls --versions --cask "$app"  > /dev/null; then
         msg_done "$app"
     else
         msg_run "$app"
