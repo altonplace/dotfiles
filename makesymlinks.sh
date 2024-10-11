@@ -91,5 +91,3 @@ fi
 }
 
 install_zsh
-
-exec zsh
