@@ -95,8 +95,12 @@ check_and_do "Configure dotfiles? [y/n]" "$DIR/makesymlinks.sh"
 
 # -- Configure P10K ------------------------------------------------------------------
 
-check_and_do "Configure P10K? [y/n]" p10k configure
+# leaving out to run after zsh is sourced
+# check_and_do "Configure P10K? [y/n]" p10k configure
+
 
 # -- Close ------------------------------------------------------------------
 
 msg_done "Your machine  works like a charm! =*"
+
+exec zsh

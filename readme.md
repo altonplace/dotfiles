@@ -25,3 +25,9 @@ Then, install this repo with `curl` available:
 ```sh
 curl -L https://raw.github.com/altonplace/dotfiles/master/bootstrap.sh | sh
 ```
+
+The script will restart zsh then configure p10k
+
+```sh
+p10k configure
+```
