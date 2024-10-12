@@ -5,7 +5,7 @@ source "$HOME/dotfiles/log.sh"
 
 
 # -- Install/Update Cask Apps ------------------------------------------------------------------
-BrewCaskApps=(docker iterm2 rectangle roon)
+BrewCaskApps=(docker iterm2 rectangle roon raspberry-pi-imager visual-studio-code)
 
 for app in "${BrewCaskApps[@]}"; do
   if open -Ra "$app" 2> /dev/null; then
