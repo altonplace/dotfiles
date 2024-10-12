@@ -1,5 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+path+=('/Users/mike/Library/Python/3.9/bin')
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -24,7 +25,7 @@ source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export "PATH=$HOME/.toolbox/bin:$PATH"
+path+=("$HOME/.toolbox/bin")
 
 # Check for built-in adders
 if [[ -d $HOME/dotfiles/dotfiles ]]; then
@@ -43,3 +44,5 @@ if [[ -d $HOME/dotfiles/custom ]]; then
     fi
   done
 fi
+
+export PATH
