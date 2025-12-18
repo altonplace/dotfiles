@@ -4,6 +4,18 @@ These are my dotfiles. Take anything you want, but at your own risk.
 
 Primarily targets macOS systems (Ventura 13.0+), but should work on \*nix systems with `apt-get`.
 
+## ✨ New Interactive Features
+
+This dotfiles setup now features an **enhanced interactive installation experience** inspired by Powerlevel10k:
+
+- 🎨 **Beautiful UI** - Clean, colorful interface with clear prompts
+- ✅ **Idempotent** - Safe to run multiple times without damage
+- 🎯 **Customizable** - Interactively add/remove apps before installation
+- 🔍 **Package Validation** - Validates Homebrew packages before attempting installation
+- 🗑️ **Stock App Removal** - Optionally remove unwanted macOS stock apps (GarageBand, iMovie, etc.)
+- 🔄 **Smart Detection** - Skips already-installed packages and configurations
+- ⚙️ **Rectangle Auto-start** - Automatically adds Rectangle to login items
+
 ## What's Included
 
 This dotfiles setup will install and configure:
@@ -17,11 +29,18 @@ This dotfiles setup will install and configure:
   - Git, Ruby, OpenSSL, wget, tree, AWS CLI
 - **Applications** (via Homebrew Cask)
   - Docker, iTerm2, Rectangle, Roon, Raspberry Pi Imager, Visual Studio Code
+  - *Fully customizable during installation*
 - **Python Environment**
   - Python 3 with pip
   - Common packages: virtualenv, requests, gnupg, pandas, numpy
+  - *Fully customizable during installation*
 - **macOS Settings**
-  - Trackpad, Finder, Dock, iTerm2 customizations
+  - Trackpad tap-to-click
+  - Finder customizations
+  - Dock customizations (removes all default apps)
+  - **Hot corners** (lower left = lock screen)
+  - iTerm2 preferences
+  - Rectangle added to login items
 
 ## Prerequisites
 
@@ -50,14 +69,28 @@ Install this dotfiles setup with a single command:
 curl -L https://raw.github.com/altonplace/dotfiles/master/bootstrap.sh | sh
 ```
 
-The bootstrap script will:
-1. Install Homebrew (if not already installed)
-2. Clone this repository to `~/dotfiles`
-3. Prompt you to install applications via Homebrew
-4. Prompt you to configure macOS settings
-5. Prompt you to install Python packages
-6. Prompt you to create dotfile symlinks
-7. Switch to Zsh and install Oh-My-Zsh with Powerlevel10k
+The bootstrap script will interactively:
+1. Check and install/update Homebrew
+2. Check and install Git
+3. Clone or update this repository to `~/dotfiles`
+4. **Interactively customize** applications to install:
+   - Show current list of Homebrew cask apps (GUI applications)
+   - Show current list of Homebrew packages (CLI tools)
+   - Allow you to add/remove items from each list
+   - Validate new additions to ensure they exist
+   - Show suggestions if package names are invalid
+5. **Interactively customize** macOS settings:
+   - Option to remove stock macOS apps (GarageBand, iMovie, Keynote, Numbers, Pages)
+   - Customize which stock apps to remove
+   - Configure system preferences (trackpad, dock, hot corners, etc.)
+   - Automatically add Rectangle to login items
+6. **Interactively customize** Python packages:
+   - Show default Python packages
+   - Allow you to add/remove packages
+7. Configure dotfiles (create symlinks for `.zshrc`, `.vimrc`, `.p10k.zsh`)
+8. Install Zsh, Oh-My-Zsh, and Powerlevel10k
+
+All steps ask for confirmation before proceeding, and the script is **safe to run multiple times** - it will skip already-completed steps.
 
 ### Post-Installation
 
@@ -151,12 +184,28 @@ If missing, install via Homebrew:
 brew install python3
 ```
 
-## Customization
+## Interactive Customization
 
-- **Applications**: Edit the `BrewCaskApps` and `BrewApps` arrays in `apps.sh`
+During installation, you can interactively customize:
+
+- **Applications**: Add or remove Homebrew casks and packages
+  - The script validates package names against Homebrew
+  - Shows suggestions for similar packages if name is invalid
+- **Stock macOS Apps**: Choose which built-in apps to remove
+  - Default list: GarageBand, iMovie, Keynote, Numbers, Pages
+  - Fully customizable during installation
+- **Python Packages**: Add or remove Python packages
+- **All major steps**: Confirm before each operation
+
+## Manual Customization
+
+You can also edit configuration files directly:
+
+- **Applications**: Edit `DEFAULT_CASK_APPS` and `DEFAULT_BREW_APPS` in `apps.sh`
 - **Dotfiles**: Modify files in the root directory (`zshrc`, `vimrc`, `p10k.zsh`)
 - **macOS Settings**: Adjust preferences in `osx.sh`
-- **Python Packages**: Update the `pip_packages` array in `python.sh`
+- **Python Packages**: Update `DEFAULT_PIP_PACKAGES` in `python.sh`
+- **Stock Apps to Remove**: Edit `DEFAULT_STOCK_APPS_TO_REMOVE` in `osx.sh`
 
 ## Uninstallation
 
@@ -175,16 +224,62 @@ chsh -s /bin/bash
 
 ```
 dotfiles/
-├── bootstrap.sh       # Main installation script
-├── apps.sh           # Homebrew package installation
-├── osx.sh            # macOS system preferences
-├── python.sh         # Python package installation
-├── makesymlinks.sh   # Dotfile symlink creation
+├── bootstrap.sh       # Main installation script (orchestrates everything)
+├── ui.sh             # Interactive UI library (p10k-style menus)
 ├── log.sh            # Logging utility functions
+├── apps.sh           # Homebrew package installation (interactive)
+├── osx.sh            # macOS system preferences & stock app removal
+├── python.sh         # Python package installation (interactive)
+├── makesymlinks.sh   # Dotfile symlink creation
 ├── zshrc             # Zsh configuration
 ├── vimrc             # Vim configuration
 └── p10k.zsh          # Powerlevel10k configuration
 ```
+
+## Features
+
+### 🎯 Idempotent Design
+
+All scripts are designed to be **safe to run multiple times**:
+- Existing installations are detected and skipped
+- Already-installed packages are not reinstalled
+- Existing symlinks are not recreated
+- Git repository updates are optional
+- No data loss on reruns
+
+### 🎨 Interactive UI
+
+The installation uses an interactive UI system inspired by `p10k configure`:
+- Clear, colorful prompts
+- Confirmation before each major step
+- Easy-to-use menus for customization
+- Success/error/warning indicators
+- Progress feedback during operations
+
+### ✅ Package Validation
+
+When adding custom Homebrew packages:
+- Validates package names against Homebrew's repository
+- Shows similar packages if exact match not found
+- Allows you to keep invalid names (with warning)
+- Prevents installation failures from typos
+
+### 🗑️ Stock App Removal
+
+Optionally remove unwanted macOS stock applications:
+- Default list includes: GarageBand, iMovie, Keynote, Numbers, Pages
+- Fully customizable list
+- Requires sudo access
+- Confirms before permanent deletion
+- Safe to run even if apps already removed
+
+### ⚙️ macOS Customizations
+
+- **Hot Corners**: Lower left corner = Lock Screen
+- **Dock**: Removes all default apps
+- **Trackpad**: Enables tap-to-click
+- **iTerm2**: Disables quit confirmation
+- **Rectangle**: Automatically added to login items
 
 ## License
 
