@@ -1,5 +1,7 @@
-#!/bin/sh
-source $HOME/dotfiles/log.sh
+#!/usr/bin/env bash
+
+# shellcheck source=src/log.sh
+source "$HOME/dotfiles/log.sh"
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
@@ -66,10 +68,10 @@ defaults write com.apple.dock wvous-bl-modifier -int 0
 ###############################################################################
 
 # remove all apps from the dock
-defaults delete com.apple.dock persistent-apps
-defaults delete com.apple.dock persistent-others
-killall Dock
-msg_nested_lvl_done "[Dock] Removed all apps from the dock "
+defaults delete com.apple.dock persistent-apps 2>/dev/null || true
+defaults delete com.apple.dock persistent-others 2>/dev/null || true
+killall Dock 2>/dev/null || true
+msg_nested_lvl_done "[Dock] Removed all apps from the dock"
 
 
 ###############################################################################

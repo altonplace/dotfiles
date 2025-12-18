@@ -25,17 +25,15 @@ msg_run "Changing to the $DIR directory"
 cd "$DIR" || exit
 msg_done "...done"
 
-# move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks 
+# move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks
 for file in "${files[@]}"; do
-    msg_run "Moving any existing dotfiles from ~ to $OLDDIR"
-    mv "$HOME/.$file" "$OLDDIR"
-    msg_run "Creating symlink to $file in home directory."
-    if [ -L "$HOME/.$file" ]; then
-      rm "$HOME/.$file"
-      ln -s "$DIR/$file" "$HOME/.$file"
-    else
-      ln -s "$DIR/$file" "$HOME/.$file"
+    if [ -f "$HOME/.$file" ] || [ -L "$HOME/.$file" ]; then
+        msg_run "Moving existing $file from ~ to $OLDDIR"
+        mv "$HOME/.$file" "$OLDDIR/"
     fi
+    msg_run "Creating symlink to $file in home directory."
+    ln -sf "$DIR/$file" "$HOME/.$file"
+    msg_done "Symlink created for $file"
 done
 
 install_zsh () {
@@ -44,13 +42,16 @@ if [ -f /bin/zsh ] || [ -f /usr/bin/zsh ]; then
     # Clone my oh-my-zsh repository from GitHub only if it isn't already present
     if [[ ! -d $DIR/oh-my-zsh/ ]]; then
         msg_run "cloning oh-my-zsh"
-        git clone http://github.com/robbyrussell/oh-my-zsh.git        
+        git clone https://github.com/robbyrussell/oh-my-zsh.git "$DIR/oh-my-zsh"
+        msg_done "oh-my-zsh cloned successfully"
     fi
 
     # Symlink the oh-my-zsh install
-    mv ~/.oh-my-zsh/ "$OLDDIR"
+    if [ -d "$HOME/.oh-my-zsh" ] || [ -L "$HOME/.oh-my-zsh" ]; then
+        mv "$HOME/.oh-my-zsh" "$OLDDIR/"
+    fi
     msg_run "Creating symlink to oh-my-zsh in home directory."
-    ln -s "$DIR/oh-my-zsh/" "$HOME/.oh-my-zsh"
+    ln -sf "$DIR/oh-my-zsh/" "$HOME/.oh-my-zsh"
 
     # Set the default shell to zsh if it isn't currently set to zsh
     msg_run "Checking if zsh is default"
@@ -61,12 +62,16 @@ if [ -f /bin/zsh ] || [ -f /usr/bin/zsh ]; then
     msg_done "Shell is zsh"
 
     # Install P10k Prompt
-    msg_run "Install P10k..."
+    msg_run "Installing P10k..."
     if [[ ! -d $DIR/oh-my-zsh/themes/powerlevel10k ]]; then
-	  git clone https://github.com/romkatv/powerlevel10k.git "$DIR/oh-my-zsh/themes/powerlevel10k";
-	  else
-    cd "$DIR/oh-my-zsh/themes/powerlevel10k" || exit
-    git pull
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$DIR/oh-my-zsh/themes/powerlevel10k"
+        msg_done "P10k installed successfully"
+    else
+        msg_run "Updating P10k..."
+        cd "$DIR/oh-my-zsh/themes/powerlevel10k" || exit
+        git pull
+        cd "$DIR" || exit
+        msg_done "P10k updated"
     fi
 else
     # If zsh isn't installed, get the platform of the current machine
