@@ -49,10 +49,11 @@ msg '\n'
 
 # -- Homebrew ------------------------------------------------------------------
 if hash brew 2> /dev/null; then
-	msg_done "Hombrew already installed"
+	msg_done "Homebrew already installed"
 else
 	msg_prompt "Homebrew not installed....installing..."
-	msg_run "/bin/bash -c ""\"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	msg_done "Homebrew installed successfully"
 fi
 
 # -- Git -----------------------------------------------------------------------
