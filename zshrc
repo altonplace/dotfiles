@@ -34,9 +34,13 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 path+=("$HOME/.toolbox/bin")
 
+# Resolve dotfiles repo location from the zshrc symlink itself — works
+# regardless of where the repo is cloned (~/dotfiles, ~/code/dotfiles, etc.)
+DOTFILES_DIR="$(dirname "$(readlink -f "${HOME}/.zshrc")")"
+
 # Check for built-in adders
-if [[ -d $HOME/dotfiles/dotfiles ]]; then
-  for DOTFILE in `find $HOME/dotfiles/dotfiles`; do
+if [[ -d "$DOTFILES_DIR/dotfiles" ]]; then
+  for DOTFILE in `find "$DOTFILES_DIR/dotfiles"`; do
     if [ -f "$DOTFILE" ]; then
       source "$DOTFILE"
     fi
@@ -44,8 +48,8 @@ if [[ -d $HOME/dotfiles/dotfiles ]]; then
 fi
 
 # Check for custom adders
-if [[ -d $HOME/dotfiles/custom ]]; then
-  for DOTFILE in `find $HOME/dotfiles/custom`; do
+if [[ -d "$DOTFILES_DIR/custom" ]]; then
+  for DOTFILE in `find "$DOTFILES_DIR/custom"`; do
     if [ -f "$DOTFILE" ]; then
       source "$DOTFILE"
     fi
