@@ -72,7 +72,7 @@ alias dev='tmux new-session -A -s dev'
 # mang-teacher: log vim/tmux usage for mastery tracking (background — no latency)
 _teacher_log() {
   local cmd="$1"
-  (bun run ~/.claude/skills/mang-teacher/Tools/log.ts --user mike --event "$cmd" </dev/null &>/dev/null 2>&1 &)
+  bun run ~/.claude/skills/mang-teacher/Tools/log.ts --user mike --event "$cmd" </dev/null &>/dev/null 2>&1 &!
 }
 
 preexec() {
