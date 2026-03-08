@@ -4,14 +4,14 @@
 # This script creates symlinks from the home directory to any desired dotfiles in ~/dotfiles
 ############################
 
-# shellcheck source=src/log.sh
-source "$HOME/dotfiles/log.sh"
+# shellcheck source=log.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/log.sh"
 
 ########## Variables
 
-DIR=$HOME/dotfiles                    # dotfiles directory
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # dotfiles directory (script location)
 OLDDIR=$HOME/dotfiles_old             # old dotfiles backup directory
-files=("zshrc" "p10k.zsh" "vimrc")    # list of files/folders to symlink in homedir
+files=("zshrc" "p10k.zsh" "vimrc" "tmux.conf")    # list of files/folders to symlink in homedir
 
 ##########
 

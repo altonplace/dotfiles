@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 path+=("$HOME/Library/Python/3.9/bin")
@@ -47,3 +54,37 @@ fi
 
 # update path with all items added to the list
 export PATH
+
+# bun completions
+[ -s "/Users/mike/.bun/_bun" ] && source "/Users/mike/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+# pai
+alias pai='bun /Users/mike/.claude/skills/PAI/Tools/pai.ts'
+
+# tmux: attach to dev session or create it
+alias dev='tmux new-session -A -s dev'
+
+# mang-teacher: log vim/tmux usage for mastery tracking (background — no latency)
+_teacher_log() {
+  local cmd="$1"
+  bun run ~/.claude/skills/mang-teacher/Tools/log.ts --user mike --event "$cmd" &>/dev/null &
+  disown
+}
+
+preexec() {
+  local cmd="$1"
+  # Match vim commands
+  if [[ "$cmd" =~ ^(vim|nvim|vi)([[:space:]]|$) ]]; then
+    _teacher_log "$cmd"
+  fi
+  # Match tmux subcommands (typed directly, not via keybinding)
+  if [[ "$cmd" =~ ^tmux[[:space:]] ]]; then
+    _teacher_log "$cmd"
+  fi
+}
+set -a; source ~/.config/secrets/.env 2>/dev/null; set +a
