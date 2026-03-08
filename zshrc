@@ -88,3 +88,13 @@ preexec() {
   fi
 }
 set -a; source ~/.config/secrets/.env 2>/dev/null; set +a
+
+# Fix: reset application cursor mode after each command.
+# oh-my-zsh key-bindings.zsh calls echoti smkx in zle-line-init; p10k widget
+# wrapping can break the paired rmkx call in zle-line-finish, leaving the
+# terminal stuck in application cursor mode (arrows print raw escape sequences).
+if (( ${+terminfo[rmkx]} )); then
+  autoload -Uz add-zle-hook-widget
+  function _reset_cursor_mode() { echoti rmkx }
+  add-zle-hook-widget zle-line-finish _reset_cursor_mode
+fi
