@@ -72,6 +72,7 @@ alias pai='bun /Users/mike/.claude/skills/PAI/Tools/pai.ts'
 
 # tmux: attach to dev session or create it
 alias dev='tmux new-session -A -s dev'
+alias lf-dev='tmux new-session -A -s lf-dev'
 
 # mang-teacher: log vim/tmux usage for mastery tracking (background — no latency)
 _teacher_log() {
@@ -91,6 +92,11 @@ preexec() {
   fi
 }
 set -a; source ~/.config/secrets/.env 2>/dev/null; set +a
+
+# OHO dev instance (port 9200, dev worktree)
+alias oho-dev='cd /Users/mike/code/olyros_code_dev/oho && OHO_DATA_DIR=~/.olyros/dev uv run oho start --config ~/.olyros/oho-config-dev.yaml --host 0.0.0.0 --no-open'
+alias oho-dev-stop='cd /Users/mike/code/olyros_code_dev/oho && OHO_DATA_DIR=~/.olyros/dev uv run oho stop'
+alias oho-dev-connect='cd /Users/mike/code/olyros_code_dev/oho && OHO_DATA_DIR=~/.olyros/dev uv run oho connect --server https://olyros-api-1081866476145.us-central1.run.app --config ~/.olyros/oho-config-dev.yaml'
 
 # Fix: reset application cursor mode after each command.
 # oh-my-zsh key-bindings.zsh calls echoti smkx in zle-line-init; p10k widget
