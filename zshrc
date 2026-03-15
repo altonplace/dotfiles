@@ -93,11 +93,6 @@ preexec() {
 }
 set -a; source ~/.config/secrets/.env 2>/dev/null; set +a
 
-# OHO dev instance (port 9200, dev worktree)
-alias oho-dev='cd /Users/mike/code/olyros_code_dev/oho && OHO_DATA_DIR=~/.olyros/dev uv run oho start --config ~/.olyros/oho-config-dev.yaml --host 0.0.0.0 --no-open'
-alias oho-dev-stop='cd /Users/mike/code/olyros_code_dev/oho && OHO_DATA_DIR=~/.olyros/dev uv run oho stop'
-alias oho-dev-connect='cd /Users/mike/code/olyros_code_dev/oho && OHO_DATA_DIR=~/.olyros/dev uv run oho connect --server https://olyros-api-1081866476145.us-central1.run.app --config ~/.olyros/oho-config-dev.yaml'
-
 # Fix: reset application cursor mode after each command.
 # oh-my-zsh key-bindings.zsh calls echoti smkx in zle-line-init; p10k widget
 # wrapping can break the paired rmkx call in zle-line-finish, leaving the
