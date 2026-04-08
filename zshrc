@@ -74,6 +74,8 @@ alias pai='bun /Users/mike/.claude/skills/PAI/Tools/pai.ts'
 # tmux: attach to dev session or create it
 alias dev='tmux new-session -A -s dev'
 alias lf-dev='tmux new-session -A -s lf-dev'
+alias personal='tmux new-session -A -s personal'
+alias oly='tmux new-session -A -s oly'
 
 # mang-teacher: log vim/tmux usage for mastery tracking (background — no latency)
 _teacher_log() {
@@ -93,6 +95,9 @@ preexec() {
   fi
 }
 set -a; source ~/.config/secrets/.env 2>/dev/null; set +a
+
+# Happy Coder — self-hosted relay for mobile Claude Code access
+export HAPPY_SERVER_URL="http://localhost:3005"
 
 # Fix: reset application cursor mode after each command.
 # oh-my-zsh key-bindings.zsh calls echoti smkx in zle-line-init; p10k widget
