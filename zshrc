@@ -97,7 +97,7 @@ preexec() {
 set -a; source ~/.config/secrets/.env 2>/dev/null; set +a
 
 # Happy Coder — self-hosted relay for mobile Claude Code access
-export HAPPY_SERVER_URL="http://localhost:3005"
+export HAPPY_SERVER_URL="https://athena.tail86a134.ts.net:3006"
 
 # Fix: reset application cursor mode after each command.
 # oh-my-zsh key-bindings.zsh calls echoti smkx in zle-line-init; p10k widget
